@@ -1,25 +1,44 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Login from './Login';
+import CustomerReservation from './CustomerReservation';
 
-function App() {
+const App = () => {
+  const [activeTab, setActiveTab] = useState('Login');
+  const [token, setToken] = useState(localStorage.getItem('token') || '');
+
+  const handleTabClick = (tabName) => {
+    setActiveTab(tabName);
+  };
+
+  const handleLogin = (userToken) => {
+    setToken(userToken);
+    localStorage.setItem('token', userToken); // Store the token in local storage
+    setActiveTab('CustomerReservation');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="app">
+      <div className="tabs">
+        <button
+          className={`tab-button ${activeTab === 'Login' ? 'active' : ''}`}
+          onClick={() => handleTabClick('Login')}
         >
-          Learn React
-        </a>
-      </header>
+          Login
+        </button>
+        <button
+          className={`tab-button ${activeTab === 'CustomerReservation' ? 'active' : ''}`}
+          onClick={() => handleTabClick('CustomerReservation')}
+        >
+          Create Customer & Reservation
+        </button>
+      </div>
+      <div className="tab-content">
+        {activeTab === 'Login' && <Login onLogin={handleLogin} />}
+        {activeTab === 'CustomerReservation' && <CustomerReservation token={token} />}
+      </div>
     </div>
   );
-}
+};
 
 export default App;
