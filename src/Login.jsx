@@ -15,27 +15,26 @@
 //         "access-control-allow-origin" : "*",
 //         // Add any other headers you might need
 //       };
-  
+
 //       const data = {
 //         username: username,
 //         password: password
 //       };
-  
+
 //       const response = await axios.post(
 //         'https://daarconn-dev.alarkan.com/Account/validatelogin',
 //         JSON.stringify(data),
 //         { headers: headers }
 //       );
-  
+
 //       const { token } = response.data;
 //       localStorage.setItem('token', token);
-  
+
 //       // Redirect or perform other actions on successful login
 //     } catch (error) {
 //       setError('Invalid credentials. Please try again.');
 //     }
 //   };
-      
 
 //   return (
 //     <div className="login-container">
@@ -59,44 +58,42 @@
 // };
 
 // export default Login;
-import React, { useState } from 'react';
-import axios from 'axios';
-import './login.css';
-
+import React, { useState } from "react";
+import axios from "axios";
+import "./login.css";
 
 const Login = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogin = async () => {
     const headers = {
-       
-        'Content-Type': 'application/json',
-        "access-control-allow-origin" : "*",
-        // Add any other headers you might need
-      };
+      "Content-Type": "application/json",
+      "access-control-allow-origin": "*",
+      // Add any other headers you might need
+    };
     try {
-      const response = await axios.post('http://localhost:8080/users/login', {
+      const response = await axios.post("http://localhost:8080/users/login", {
         email: email,
         password: password,
-        headers: headers 
+        headers: headers,
       });
-     
 
-      if (response.data.success) {
-        const { token } = response.data;
-        localStorage.setItem('token', token);
-        setError('');
+      console.log("Response : ", response.data);
+      if (response.data) {
+        // const { token } = response.data;
+        localStorage.setItem("token", JSON.stringify(response.data.token));
+        // sessionStorage.setItem("token", "Test");
+        setError("");
         onLogin(); // Notify parent component about successful login
       } else {
-        setError('Invalid credentials. Please try again.');
+        setError("Invalid credentials. Please try again.");
       }
     } catch (error) {
-      setError('An error occurred. Please try again later.');
+      setError("An error occurred. Please try again later.");
     }
   };
-  
 
   return (
     <div className="login-container">
